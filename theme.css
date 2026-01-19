@@ -1,0 +1,207 @@
+/*
+ * Theme stylesheet for the self‑modifying binaries slide deck.
+ *
+ * The design follows a controlled, technical, cyberpunk aesthetic without cliché.
+ * It uses a dark palette, monospace fonts and a persistent terminal window.
+ */
+
+:root {
+  /* Accent colour used for titles and caret. */
+  --accent-colour: #39ff14;
+}
+
+/* Reset defaults */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Courier New", Courier, monospace;
+  color: #e0e0e0;
+  height: 100vh;
+  overflow: hidden;
+  /* Background image is set via CSS so it can be replaced with a base64 URI in the build. */
+  background: url('assets/butterfly_hex.png') no-repeat center/cover fixed;
+}
+
+/* Semi‑transparent overlay to darken the background image for readability.
+ * Adjusted opacity to ensure the butterfly hex pattern remains visible while
+ * maintaining sufficient contrast for slide content. */
+#background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Use a lighter opacity so the hex motif is perceptible even after
+     overlaying; this strikes a balance between aesthetics and readability. */
+  background: rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Navigation bar at the top */
+nav#navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(15, 15, 20, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 1000;
+  color: #ffffff;
+}
+
+nav#navbar .logo {
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+nav#navbar select {
+  background: #222;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 5px 10px;
+  font-family: inherit;
+}
+
+/* Animated RGB strip at the bottom of the nav */
+nav#navbar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #ff0080, #00b3ff, #00ff00, #ff0080);
+  background-size: 600% 100%;
+  animation: gradientSlide 10s linear infinite;
+}
+
+@keyframes gradientSlide {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 600% 0%;
+  }
+}
+
+/* Terminal container styling */
+#terminal-container {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 900px;
+  height: calc(100vh - 100px);
+  border: 2px solid #444;
+  border-radius: 6px;
+  background: rgba(20, 20, 25, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Terminal title bar */
+#terminal-title {
+  background: rgba(30, 30, 40, 0.9);
+  border-bottom: 1px solid #444;
+  padding: 8px 10px;
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--accent-colour);
+}
+
+/* Terminal scrollable content area */
+#terminal-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: normal;
+}
+
+/* Typography adjustments for headings */
+#terminal-content h1,
+#terminal-content h2,
+#terminal-content h3,
+#terminal-content h4,
+#terminal-content h5,
+#terminal-content h6 {
+  margin-top: 0;
+  color: var(--accent-colour);
+}
+
+#terminal-content ul,
+#terminal-content ol {
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+#terminal-content li {
+  margin-bottom: 5px;
+}
+
+/* Code block styling to mimic terminal output */
+#terminal-content pre {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #444;
+  padding: 10px;
+  overflow-x: auto;
+  margin: 10px 0;
+  color: #9f9;
+}
+
+#terminal-content code {
+  font-family: "Courier New", Courier, monospace;
+  color: #bada55;
+}
+
+/* Blinking caret similar to a console prompt */
+#terminal-caret {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  margin-left: 2px;
+  background: var(--accent-colour);
+  align-self: flex-start;
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Figure styling with auto scaling */
+figure {
+  margin: 10px 0;
+  text-align: center;
+}
+
+figure img {
+  max-width: 100%;
+  max-height: 52vh;
+  display: block;
+  margin: 0 auto;
+}
+
+figure figcaption {
+  font-size: 0.8em;
+  color: #aaa;
+  margin-top: 5px;
+}

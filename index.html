@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Self‑Modifying Binaries Deck</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Theme styles -->
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <!-- Navigation bar with animated RGB strip -->
+  <nav id="navbar">
+    <!-- Deck title will be populated from deck.json at runtime -->
+    <div class="logo" id="deck-title">Loading…</div>
+    <select id="slide-select"></select>
+  </nav>
+
+  <!-- Dark overlay for readability over the butterfly background -->
+  <div id="background-overlay"></div>
+
+  <!-- Terminal rendering surface -->
+  <div id="terminal-container">
+    <div id="terminal-title">Loading…</div>
+    <div id="terminal-content"></div>
+    <span id="terminal-caret">█</span>
+  </div>
+
+  <!-- Placeholder for embedded fallback data. The build script will inject the
+       actual deck, slides and assets into this assignment. In development
+       mode this object will remain empty and the application will fetch
+       deck.json and markdown files from the server. -->
+  <script>
+    window.EMBED_DATA = window.EMBED_DATA || {};
+  </script>
+
+  <!-- Application logic -->
+  <script src="app.js"></script>
+</body>
+</html>

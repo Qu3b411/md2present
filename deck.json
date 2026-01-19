@@ -1,0 +1,11 @@
+{
+  "title": "Terminal Slide Deck Framework",
+  "slides": [
+    { "title": "Framework Overview", "file": "slides/slide1.md" },
+    { "title": "Deck Structure", "file": "slides/slide2.md" },
+    { "title": "Navigation & Rendering", "file": "slides/slide3.md" },
+    { "title": "Customising the Look", "file": "slides/slide4.md" },
+    { "title": "Development & Build", "file": "slides/slide5.md" },
+    { "title": "Troubleshooting & Tips", "file": "slides/slide6.md" }
+  ]
+}

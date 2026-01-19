@@ -1,0 +1,60 @@
+name: Rebuild docs (classic GitHub Pages) using node
+
+on:
+  push:
+    branches: [ "main" ]
+    # Avoid infinite loop when the workflow commits docs/
+    paths-ignore:
+      - "docs/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rebuild-docs-main
+  cancel-in-progress: true
+
+jobs:
+  build-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # If your build script imports any packages from node_modules,
+      # keep these two steps. If it's truly dependency-free, you can remove them.
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Optional (remove if you have zero dependencies)
+      - name: Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f package.json ]; then
+            npm install
+          else
+            echo "No package.json; skipping install."
+          fi
+
+      - name: Build site into docs/
+        run: node build/build.js
+
+      - name: Commit and push docs/
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add docs
+
+          # Exit if no changes
+          git diff --cached --quiet && exit 0
+
+          git commit -m "chore(pages): rebuild docs"
+          git push
+

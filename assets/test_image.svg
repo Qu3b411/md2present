@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+  Simple SVG illustrating the relationship between polymorphic and metamorphic code.
+  The design uses contrasting colours and a connecting arrow to emphasise the
+  conceptual link between the two techniques.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#aaaaaa" />
+    </marker>
+  </defs>
+  <!-- Polymorphic block -->
+  <rect x="30" y="80" width="220" height="100" rx="10" ry="10" fill="#004d7a" />
+  <text x="140" y="140" text-anchor="middle" fill="#ffffff" font-size="16" font-family="Courier New">Polymorphic Code</text>
+  <!-- Metamorphic block -->
+  <rect x="350" y="80" width="220" height="100" rx="10" ry="10" fill="#7a004d" />
+  <text x="460" y="140" text-anchor="middle" fill="#ffffff" font-size="16" font-family="Courier New">Metamorphic Code</text>
+  <!-- Connecting arrow -->
+  <line x1="250" y1="130" x2="350" y2="130" stroke="#aaaaaa" stroke-width="2" marker-end="url(#arrow)" />
+  <!-- Labels -->
+  <text x="140" y="200" text-anchor="middle" fill="#aaaaaa" font-size="12" font-family="Courier New">Mutates decryption stub</text>
+  <text x="460" y="200" text-anchor="middle" fill="#aaaaaa" font-size="12" font-family="Courier New">Rewrites its own body</text>
+</svg>
