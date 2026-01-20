@@ -11,7 +11,7 @@ There are two primary workflows when working with the terminal deck:
 
 2. **Build mode:**
    * Run `node build/build.js` from the project root.
-   * This generates a single file at `dist/index.html` that contains
+   * This generates a single file at `docs/index.html` that contains
      embedded slides, images, CSS and JavaScript.
    * Open the generated file via `file://` or host it on any static server.
 
