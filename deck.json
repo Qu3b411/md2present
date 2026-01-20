@@ -1,5 +1,5 @@
 {
-  "title": "Terminal Slide Deck Framework",
+  "title": "Terminal Slide Deck Framework!",
   "slides": [
     { "title": "Framework Overview", "file": "slides/slide1.md" },
     { "title": "Deck Structure", "file": "slides/slide2.md" },
