@@ -1,0 +1,11 @@
+{
+  "name": "terminal-slide-deck-framework",
+  "version": "0.0.1-beta.0",
+  "private": true,
+  "description": "Local framework that generates a static index.html slide deck for terminal-style technical presentations.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build/build.js"
+  }
+}
+
