@@ -24,7 +24,9 @@
   async function loadDeck() {
     try {
       const res = await fetch('deck.json');
-      if (!res.ok) throw new Error(`HTTP ${res.status} for ${mdPath}`);
+      // If the fetch fails, report the file name correctly instead of referencing
+      // an undefined mdPath variable. mdPath is only defined in loadSlide.
+      if (!res.ok) throw new Error(`HTTP ${res.status} for deck.json`);
       deck = await res.json();
     } catch (e) {
       if (window.EMBED_DATA && window.EMBED_DATA.deck) {
@@ -214,14 +216,60 @@
    * Process inline markdown for bold, italic and inline code.
    */
   function processInline(text) {
-    // Bold (double asterisks or underscores)
+    // --- Inline Markdown processing ---
+    //
+    // The order of operations here is important to ensure that
+    // Markdown markers inside code spans or escaped characters
+    // are not inadvertently interpreted as formatting. To achieve
+    // this, we first unescape escaped characters, then temporarily
+    // replace code spans with placeholders, apply bold/italic
+    // formatting, and finally restore the code spans with HTML
+    // escaping applied.
+
+    // 1. Escape literal underscores and asterisks. Markdown allows
+    //    backslash‑escaped characters (e.g. \_ or \*) to be treated
+    //    literally rather than invoking formatting. Replace these
+    //    sequences with HTML entities up front so that the
+    //    subsequent formatting logic does not interpret them. We use
+    //    &#95; for underscore and &#42; for asterisk. These will be
+    //    interpreted by the browser as literal characters when
+    //    rendered.
+    text = text.replace(/\\_/g, '&#95;');
+    text = text.replace(/\\\*/g, '&#42;');
+
+    // 2. Extract inline code spans and replace them with
+    //    placeholders. We store the captured code segments in
+    //    an array so they can be restored after other formatting
+    //    has been applied. This prevents Markdown patterns from
+    //    running inside code spans.
+    const codeSpans = [];
+    text = text.replace(/`([^`]+)`/g, (match, p1) => {
+      const placeholder = `__CODE_PLACEHOLDER_${codeSpans.length}__`;
+      codeSpans.push(p1);
+      return placeholder;
+    });
+
+    // 3. Apply bold formatting using double asterisks (**bold**).
+    //    We deliberately avoid supporting bold with double underscores
+    //    because double underscores are common in identifiers (e.g.
+    //    __init__, __section_alignment__) and should not be
+    //    interpreted as formatting. Users should use ** for bold.
     text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    text = text.replace(/__(.*?)__/g, '<strong>$1</strong>');
-    // Italic (single asterisk or underscore)
+
+    // 4. Apply italic formatting using single asterisks (*italic*).
+    //    We intentionally do not support underscore‑based italics to
+    //    avoid collisions with identifiers containing underscores.
     text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    text = text.replace(/_(.*?)_/g, '<em>$1</em>');
-    // Inline code
-    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    // 5. Restore inline code spans. When reinserting, escape any
+    //    HTML special characters inside the code to prevent tag
+    //    injection. The escapeHtml helper defined below is reused
+    //    here for consistency.
+    text = text.replace(/__CODE_PLACEHOLDER_(\d+)__/g, (match, idx) => {
+      const codeText = codeSpans[parseInt(idx, 10)] || '';
+      return `<code>${escapeHtml(codeText)}</code>`;
+    });
+
     return text;
   }
 
